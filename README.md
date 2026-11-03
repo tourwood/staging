@@ -32,6 +32,6 @@ Repo Settings → Pages → Source: **GitHub Actions**. Every push to `main` dep
 - Form: Cloudflare Turnstile (verified server-side), honeypot field, minimum fill time, per-IP rate limit, header-injection checks.
 
 ## Known TODOs
-- Self-host fonts (currently Google Fonts: Roboto Slab + Inter).
+- Self-host fonts (currently Google Fonts: Inter only).
 - Replace logo with a vector/high-res original (current one is upscaled from 397×123 px).
 - Replace the three building images with real Tourwood photography if available.

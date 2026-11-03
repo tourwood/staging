@@ -79,7 +79,7 @@ function layout({ title, desc, path, body, home = false }) {
 <meta name="robots" content="${BASE ? 'noindex, nofollow' : 'index, follow'}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Roboto+Slab:wght@600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="${u('/assets/style.css')}">
 <script defer src="${u('/assets/main.js')}"></script>
 <script defer src="https://challenges.cloudflare.com/turnstile/v0/api.js"></script>
