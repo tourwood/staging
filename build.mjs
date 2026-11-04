@@ -235,7 +235,7 @@ for (const s of services) {
     ${s.points.map(([h, t]) => `<div class="point reveal"><h2>${esc(h)}</h2><p>${esc(t)}</p></div>`).join('')}
   </div>
 </section>
-<section class="band"><div class="wrap band__in"><p>Discuss ${esc(s.title.toLowerCase())} for your property.</p>${cta('Get a Quote', '/#quote', 'btn--solid')}</div></section>`,
+<section class="band"><div class="wrap band__in"><p>${esc(s.ctaLine ?? `Discuss ${s.title.toLowerCase()} for your property.`)}</p>${cta('Get a Quote', '/#quote', 'btn--solid')}</div></section>`,
   });
 }
 

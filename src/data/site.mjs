@@ -26,6 +26,7 @@ export const images = {
 export const services = [
   {
     slug: 'commercial-industrial',
+    ctaLine: 'Discuss commercial and industrial cleaning / maintenance services for your property.',
     title: 'Commercial & Industrial',
     short: 'Offices, factories, warehouses, retail sites, medical facilities and showrooms.',
     img: 'industrial',
@@ -39,6 +40,7 @@ export const services = [
   },
   {
     slug: 'high-rise-residential',
+    ctaLine: 'Discuss high rise residential cleaning / maintenance services for your property.',
     title: 'High Rise Residential',
     short: 'Common-area cleaning and maintenance with a consistent point of contact.',
     img: 'highrise',
@@ -53,6 +55,7 @@ export const services = [
   },
   {
     slug: 'body-corporate',
+    ctaLine: 'Discuss body corporate cleaning / maintenance services for your property.',
     title: 'Body Corporate',
     short: 'Foyers, corridors, stairwells, car parks and grounds, serviced on a routine.',
     img: 'highrise',
