@@ -55,7 +55,7 @@ export const services = [
   },
   {
     slug: 'body-corporate',
-    ctaLine: 'Discuss cleaning / maintenance services for your body corporate.',
+    ctaLine: 'Discuss cleaning / maintenance services for your body corporate managed property.',
     title: 'Body Corporate',
     short: 'Foyers, corridors, stairwells, car parks and grounds, serviced on a routine.',
     img: 'highrise',
