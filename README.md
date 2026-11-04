@@ -35,3 +35,9 @@ Repo Settings → Pages → Source: **GitHub Actions**. Every push to `main` dep
 - Self-host fonts (currently Google Fonts: Inter only).
 - Replace logo with a vector/high-res original (current one is upscaled from 397×123 px).
 - Replace the three building images with real Tourwood photography if available.
+
+## SEO / migration notes
+- Old WordPress URLs kept unchanged: `/why-tourwood/`, `/emergencies/`, `/covid-deep-cleaning/`, `/quality-assurance/`, `/environment/` (see `extras` in `src/data/site.mjs`). Linked from the footer only.
+- 301 redirects in `public/.htaccess`: `/home/` → `/`, `/services-client-sectors/` → `/services/`, `/contact-us/` → `/contact/`. Add more if Search Console shows other old URLs.
+- Canonical host is `https://www.tourwood.com.au` (override with `SITE_URL=`). Canonical, Open Graph and LocalBusiness JSON-LD are only emitted on the live build (not on staging, which is noindex).
+- Pending client confirmation: Emergencies and COVID wording (old content is partly dated), and any old URLs not yet seen.

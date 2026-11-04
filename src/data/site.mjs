@@ -26,6 +26,7 @@ export const images = {
 export const services = [
   {
     slug: 'commercial-industrial',
+    seoTitle: 'Commercial & Industrial Cleaning and Maintenance, Victoria',
     ctaLine: 'Discuss commercial and industrial cleaning / maintenance services for your property.',
     title: 'Commercial & Industrial',
     short: 'Offices, factories, warehouses, retail sites, medical facilities and showrooms.',
@@ -40,6 +41,7 @@ export const services = [
   },
   {
     slug: 'high-rise-residential',
+    seoTitle: 'High Rise Residential Cleaning and Maintenance, Victoria',
     ctaLine: 'Discuss cleaning / maintenance services for your high rise residential property.',
     title: 'High Rise Residential',
     short: 'Common-area cleaning and maintenance with a consistent point of contact.',
@@ -55,6 +57,7 @@ export const services = [
   },
   {
     slug: 'body-corporate',
+    seoTitle: 'Body Corporate Cleaning and Maintenance, Victoria',
     ctaLine: 'Discuss cleaning / maintenance services for your body corporate managed property.',
     title: 'Body Corporate',
     short: 'Foyers, corridors, stairwells, car parks and grounds, serviced on a routine.',
@@ -70,6 +73,7 @@ export const services = [
   },
   {
     slug: 'maintenance-specialist',
+    seoTitle: 'Property Maintenance, Repairs & Specialist Cleaning, Victoria',
     title: 'Maintenance & Specialist Services',
     short: 'Repairs, refurbishment, specialist cleaning, grounds and site support.',
     img: 'office',
@@ -88,4 +92,74 @@ export const marquee = [
   'Window cleaning', 'Carpet & upholstery', 'High pressure washing', 'Car park cleaning',
   'Commercial sweeping', 'Solid surface buffing', 'Painting & carpentry', 'Plumbing & electrical',
   'Grounds maintenance', 'Waste removal', 'Washroom hygiene',
+];
+
+// Extra pages kept at the SAME URLs as the old WordPress site so existing rankings and inbound links carry over.
+// Wording is based on the old site (and the company profile PDF); the client should confirm it is still accurate.
+export const extras = [
+  {
+    slug: 'why-tourwood',
+    title: 'Why Tourwood',
+    seoTitle: 'Why choose Tourwood Property Services',
+    desc: 'Prompt, reliable cleaning and property maintenance across metro and regional Victoria, with one single point of contact.',
+    lead: 'Cleaning and property maintenance affect your building, your staff and your tenants every single day. We take that responsibility seriously, and we plan our work to be prompt, efficient and seamless.',
+    points: [
+      ['Prompt and reliable', 'On time, every time, with emergency fixes and same-day attention where the issue is critical.'],
+      ['Metro and regional', 'We service properties across Victoria, in Melbourne and in regional areas.'],
+      ['A one-stop shop', 'One team for all of your property service requirements, rather than a list of separate contractors.'],
+      ['One single point of contact', 'This greatly reduces the time you spend organising your property maintenance and cleaning.'],
+      ['Detailed records', 'Our Customer Services Database logs client interaction and history, along with periodic maintenance requirements such as window cleaning, carpet and hard floor maintenance, car park cleaning and gardening, plus agreed tasks and frequencies.'],
+      ['Discreet and thorough', 'Everyday services are delivered in a timely, discreet, thorough and reliable manner.'],
+    ],
+  },
+  {
+    slug: 'emergencies',
+    title: 'Emergencies',
+    seoTitle: 'Emergency property maintenance and repairs, Victoria',
+    desc: 'Emergency fixes for commercial, industrial and residential properties across Victoria, with same-day attention where the issue is critical.',
+    lead: 'When something goes wrong at your property, you need one team to call. Emergency fixes, with same-day attention where the issue is critical, are part of how Tourwood works.',
+    points: [
+      ['One number to call', 'Our single point of contact means you are not hunting for the right trade in the middle of a problem.'],
+      ['Licensed trades in-house', 'Plumbing and electrical services, glazing, carpentry, and building repairs through our licensed commercial and domestic building units.'],
+      ['Metro and regional', 'We service properties across Melbourne and regional Victoria.'],
+      ['Cleaning and site support', 'Specialist cleaning, waste removal and washroom hygiene support when a site needs to get back to normal quickly.'],
+    ],
+  },
+  {
+    slug: 'covid-deep-cleaning',
+    title: 'COVID Safety & Deep Cleaning',
+    seoTitle: 'COVID safety, deep cleaning and decontamination, Victoria',
+    desc: 'Deep cleaning to a very high standard, and decontamination cleaning after a positive case at a managed site, backed by a COVID Safe Plan.',
+    lead: 'Tourwood operates with a detailed COVID Safe Plan covering our staff and clients. We can also provide the following services on an ongoing, or as-required, basis.',
+    points: [
+      ['Deep cleaning', 'For clients who want a very high level of cleanliness (hospital grade), either periodically or on a regular schedule.'],
+      ['COVID cleaning', 'Decontamination cleaning if there is a positive case at one of our managed sites.'],
+      ['Our COVID Safe Plan', 'Covers our staff and our clients. Contact us if you would like a copy.'],
+    ],
+  },
+  {
+    slug: 'quality-assurance',
+    title: 'Quality Assurance',
+    seoTitle: 'Quality assurance: inspections, reports and service records',
+    desc: 'How Tourwood inspects, records and reports on its cleaning and maintenance work, so clients are always serviced to a high standard.',
+    lead: 'Our quality assurance programme is comprehensive, ongoing and continually monitored, so clients are always serviced in a professional and high quality manner.',
+    points: [
+      ['Regular site inspections', 'Operations Management inspects sites fortnightly or as required, with detailed inspection reports shared with clients and cleaning staff, signed off by a client representative and followed up at the next inspection or service call.'],
+      ['Customer contact', 'Monthly customer service calls support the inspections, so issues are raised and dealt with early.'],
+      ['A complete client history', 'Our Customer Services Database logs all discussions and contact with each client, so a full history can be referred to at any time.'],
+      ['Scheduled periodic work', 'Periodic carpet, hard surface and window cleaning is scheduled by frequency without client involvement, flagged for completion and signed off by the client. A site Communication Book records special requests and completed tasks.'],
+    ],
+  },
+  {
+    slug: 'environment',
+    title: 'Environment',
+    seoTitle: 'Environmental commitment: biodegradable cleaning products',
+    desc: 'Biodegradable cleaning products, safety documentation for each site on request, and a commitment to minimise plastic use.',
+    lead: 'Tourwood has a firm commitment to the environment.',
+    points: [
+      ['Biodegradable products', 'Our cleaning products are biodegradable and designed to break down without negative environmental effects.'],
+      ['Safety documentation', 'We can provide Material Safety Data Sheets (MSDS) for the products used, site by site, as required.'],
+      ['Less plastic', 'Where possible, and subject to client requirements, we aim to minimise plastic use to reduce the environmental impact of our work.'],
+    ],
+  },
 ];

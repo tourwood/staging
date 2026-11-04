@@ -4,12 +4,14 @@
 //       TURNSTILE_SITEKEY=...  (Cloudflare Turnstile site key; defaults to Cloudflare's always-pass test key)
 import { mkdirSync, rmSync, cpSync, writeFileSync, readFileSync, existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
-import { site, images, services, marquee } from './src/data/site.mjs';
+import { site, images, services, marquee, extras } from './src/data/site.mjs';
 
 const BASE = (process.env.BASE || '').replace(/\/$/, '');
 const DEMO = process.env.FORM_DEMO === '1';
 const SITEKEY = process.env.TURNSTILE_SITEKEY || '1x00000000000000000000AA'; // Cloudflare test key
 const OUT = 'dist';
+// Canonical host: matches the existing indexed URLs on the old site (www).
+const SITE = (process.env.SITE_URL || 'https://www.tourwood.com.au').replace(/\/$/, '');
 
 const u = (p) => `${BASE}${p}`;
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -76,13 +78,38 @@ function layout({ title, desc, path, body, home = false }) {
 <title>${esc(full)}</title>
 <meta name="description" content="${esc(desc)}">
 <meta name="theme-color" content="#862f35">
-<meta name="robots" content="${BASE ? 'noindex, nofollow' : 'index, follow'}">
+<meta name="robots" content="${BASE || path.endsWith('.html') ? 'noindex, nofollow' : 'index, follow'}">
+${BASE || path.endsWith('.html') ? '' : `<link rel="canonical" href="${SITE}${path}">
+<meta property="og:url" content="${SITE}${path}">
+<meta property="og:image" content="${SITE}/assets/img/og.jpg">`}
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_AU">
+<meta property="og:site_name" content="${esc(site.name)}">
+<meta property="og:title" content="${esc(full)}">
+<meta property="og:description" content="${esc(desc)}">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="${u('/assets/img/favicon.png')}" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="${u('/assets/style.css')}">
 <script defer src="${u('/assets/main.js')}"></script>
 <script defer src="https://challenges.cloudflare.com/turnstile/v0/api.js"></script>
+${!BASE && (path === '/' || path === '/contact/') ? `<script type="application/ld+json">${JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  name: site.name,
+  legalName: 'Antros Services Pty Ltd',
+  url: SITE + '/',
+  logo: SITE + '/assets/img/logo.png',
+  image: SITE + '/assets/img/og.jpg',
+  description: 'Commercial cleaning and property maintenance for commercial, industrial, high rise residential and body corporate properties across Victoria.',
+  telephone: '+61 3 9853 6330',
+  faxNumber: '+61 3 9853 0915',
+  address: { '@type': 'PostalAddress', streetAddress: 'Suite 213, 1 Princess Street', addressLocality: 'Kew', addressRegion: 'VIC', postalCode: '3101', addressCountry: 'AU' },
+  areaServed: { '@type': 'State', name: 'Victoria' },
+  foundingDate: undefined,
+})}</script>` : ''}
 </head>
 <body class="${home ? 'is-home' : ''}">
 <div class="progress" aria-hidden="true"></div>
@@ -112,6 +139,10 @@ ${body}
       <h2>Services</h2>
       <ul>${services.map((s) => `<li><a href="${u(`/services/${s.slug}/`)}">${esc(s.title)}</a></li>`).join('')}</ul>
     </div>
+    <div class="ftr__more">
+      <h2>More about Tourwood</h2>
+      <ul>${extras.map((x) => `<li><a href="${u(`/${x.slug}/`)}">${esc(x.title)}</a></li>`).join('')}</ul>
+    </div>
   </div>
   <p class="ftr__legal">${esc(site.legal)} · ABN ${site.abn} · Licence ${site.licence}<br>© <span class="yr">2026</span> Tourwood Property Services</p>
 </footer>
@@ -126,14 +157,14 @@ const add = (path, o) => pages.push({ path, html: layout({ ...o, path }) });
 // Home
 add('/', {
   home: true,
-  title: 'Tourwood Property Services | Property maintenance & cleaning across Victoria',
+  title: 'Commercial Cleaning & Property Maintenance | Tourwood',
   desc: 'One team for property maintenance, cleaning and building services across Victoria. Commercial, industrial, high rise residential and body corporate. 30+ years of experience.',
   body: `
 <section class="hero">
   <div class="hero__media" aria-hidden="true">${pic('office', { cls: 'hero__img', eager: true, sizes: '100vw', alt: '' })}</div>
   <div class="hero__shade" aria-hidden="true"></div>
   <div class="hero__content wrap">
-    <p class="eyebrow">Property maintenance &amp; cleaning · Victoria</p>
+    <p class="eyebrow">Commercial cleaning &amp; property maintenance · Victoria</p>
     <h1>One team for everything your building needs.</h1>
     <p class="hero__sub">Cleaning, maintenance and building services for commercial, industrial, high rise and body corporate properties, backed by over 30 years of experience.</p>
     <div class="hero__cta">${cta('Get a Quote', '#quote', 'btn--solid btn--lg')}${cta('Our services', '/services/', 'btn--ghost btn--lg')}</div>
@@ -222,7 +253,7 @@ add('/services/', {
 // Service detail pages
 for (const s of services) {
   add(`/services/${s.slug}/`, {
-    title: s.title,
+    title: s.seoTitle ?? s.title,
     desc: s.lead,
     body: `
 <section class="pagehead pagehead--img">
@@ -239,6 +270,22 @@ for (const s of services) {
   });
 }
 
+// Pages carried over from the old site at the same URLs
+for (const x of extras) {
+  add(`/${x.slug}/`, {
+    title: x.seoTitle ?? x.title,
+    desc: x.desc,
+    body: `
+<section class="pagehead"><div class="wrap"><p class="eyebrow">Tourwood Property Services</p><h1>${esc(x.title)}</h1><p class="pagehead__lead">${esc(x.lead)}</p></div></section>
+<section class="wrap detail">
+  <div class="detail__grid">
+    ${x.points.map(([h, t]) => `<div class="point reveal"><h2>${esc(h)}</h2><p>${esc(t)}</p></div>`).join('')}
+  </div>
+</section>
+<section class="band"><div class="wrap band__in"><p>Talk to us about your property.</p>${cta('Get a Quote', '/#quote', 'btn--solid')}</div></section>`,
+  });
+}
+
 // About & Quality
 add('/about-quality/', {
   title: 'About & Quality',
@@ -248,9 +295,9 @@ add('/about-quality/', {
 <section class="wrap prose">
   <div class="prose__block reveal"><h2>Who we work with</h2><p>We work with property managers, owners and tenants, providing ongoing programmes and ad hoc services for properties large and small, across offices, factories, retail sites, medical facilities, warehouses, showrooms, residential units, high rise complexes and body corporate properties.</p></div>
   <div class="prose__block reveal"><h2>Our people &amp; insurance</h2><p>Our team receives induction and occupational health and safety training. Staff are screened and issued identification cards, with ongoing site assignments supporting consistency and trust. Tourwood holds WorkCover and public risk policies covering its activities. Certificates of Currency are available on request.</p></div>
-  <div class="prose__block reveal"><h2>Quality assurance</h2><p>Operations Management conducts site inspections fortnightly or as required, supported by monthly customer service calls. Inspection reports are shared with clients and cleaning staff, signed off by a client representative and followed up at the next inspection or service call.</p></div>
+  <div class="prose__block reveal"><h2>Quality assurance</h2><p>Operations Management conducts site inspections fortnightly or as required, supported by monthly customer service calls. Inspection reports are signed off by a client representative and followed up at the next visit. <a class="link" href="${u('/quality-assurance/')}">Quality assurance in detail</a></p></div>
   <div class="prose__block reveal"><h2>Service records &amp; communication</h2><p>Our Customer Services Database maintains site details, inspection records, communications and service history. Periodic carpet, vinyl and window cleaning is scheduled by frequency, flagged for completion and signed off by the client. A site Communication Book supports special requests and records completed tasks.</p></div>
-  <div class="prose__block reveal"><h2>Environmental commitment</h2><p>Our existing programme specifies biodegradable cleaning products, with product safety documentation available for each site on request. Where possible, and subject to client requirements, we aim to minimise plastic use.</p></div>
+  <div class="prose__block reveal"><h2>Environmental commitment</h2><p>Biodegradable cleaning products, safety documentation for each site on request, and a commitment to minimise plastic use. <a class="link" href="${u('/environment/')}">Our environmental commitment</a></p></div>
 </section>
 <section class="band"><div class="wrap band__in"><p>Talk to us about a coordinated programme for your property.</p>${cta('Get a Quote', '/#quote', 'btn--solid')}</div></section>`,
 });
@@ -292,9 +339,9 @@ cpSync('src/css/style.css', join(OUT, 'assets/style.css'));
 cpSync('src/js/main.js', join(OUT, 'assets/main.js'));
 if (existsSync('public')) cpSync('public', OUT, { recursive: true });
 // robots + sitemap
-writeFileSync(join(OUT, 'robots.txt'), BASE ? 'User-agent: *\nDisallow: /\n' : `User-agent: *\nAllow: /\nSitemap: https://tourwood.com.au/sitemap.xml\n`);
+writeFileSync(join(OUT, 'robots.txt'), BASE ? 'User-agent: *\nDisallow: /\n' : `User-agent: *\nAllow: /\nSitemap: ${SITE}/sitemap.xml\n`);
 if (!BASE) {
-  const urls = pages.filter((p) => !p.path.endsWith('.html')).map((p) => `<url><loc>https://tourwood.com.au${p.path}</loc></url>`).join('');
+  const urls = pages.filter((p) => !p.path.endsWith('.html')).map((p) => `<url><loc>${SITE}${p.path}</loc></url>`).join('');
   writeFileSync(join(OUT, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls}</urlset>`);
 }
 console.log(`Built ${pages.length} pages -> ${OUT}/ (BASE='${BASE}', demo=${DEMO})`);

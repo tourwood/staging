@@ -18,7 +18,18 @@ ErrorDocument 404 /404.html
   </FilesMatch>
 </IfModule>
 
-# Uncomment once SSL is active on the live site:
-# RewriteEngine On
+RewriteEngine On
+
+# --- Permanent (301) redirects from the old WordPress site so search rankings and links carry over ---
+# Pages kept at the SAME URL as before need no redirect: /why-tourwood/ /emergencies/ /covid-deep-cleaning/ /quality-assurance/ /environment/
+RewriteRule ^home/?$ / [R=301,L]
+RewriteRule ^services-client-sectors/?$ /services/ [R=301,L]
+RewriteRule ^contact-us/?$ /contact/ [R=301,L]
+# Add more here if Search Console / a crawl shows other old URLs (blog posts, ?p=ID links, etc.)
+
+# --- Uncomment once SSL is active on the live site (force https) ---
 # RewriteCond %{HTTPS} off
 # RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+# --- Canonical host is www (matches the old site). Uncomment to send non-www to www: ---
+# RewriteCond %{HTTP_HOST} ^tourwood\.com\.au$ [NC]
+# RewriteRule ^(.*)$ https://www.tourwood.com.au/$1 [R=301,L]
