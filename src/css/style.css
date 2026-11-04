@@ -175,7 +175,7 @@ main { padding-top: var(--hdr); }
 @keyframes zoomout { from { transform: scale(1.25); } to { transform: scale(1); } }
 @keyframes heroOut { to { opacity: 0; transform: translateY(-60px); } }
 @keyframes parallax { to { transform: translateY(12vh); } }
-@keyframes zoomin { from { transform: scale(1); } to { transform: scale(1.7); } }
+@keyframes zoomin { from { transform: scale(1); } to { transform: scale(2.5); } }
 @keyframes grow { to { transform: scaleX(1); } }
 @keyframes hdrbg { from { box-shadow: none; } to { box-shadow: 0 6px 24px rgb(0 0 0 / .12); } }
 @keyframes count { from { --n: 0; } to { --n: 30; } }
