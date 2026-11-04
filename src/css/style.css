@@ -74,7 +74,9 @@ main { padding-top: var(--hdr); }
 
 /* ---------- statement / stats ---------- */
 .statement { padding-block: clamp(4rem, 9vw, 8rem); }
-.statement__text { font: 600 clamp(1.4rem, 2.7vw, 2.15rem)/1.4 var(--font-head); max-width: 58ch; margin-inline: auto; color: var(--maroon-dark); text-align: left; }
+.statement__text { font: 600 clamp(1.4rem, 2.7vw, 2.15rem)/1.4 var(--font-head); max-width: 58ch; margin-inline: 0; color: var(--maroon-dark); text-align: left; }
+.statement__list { list-style: none; padding: 0; margin: 2rem 0 2.5rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1rem; }
+.statement__list li { background: var(--cream); border-left: 4px solid var(--maroon); border-radius: 0 10px 10px 0; padding: 1.1rem 1.25rem; font: 600 1.1rem/1.3 var(--font-head); color: var(--maroon-dark); }
 .stats { background: var(--mint); }
 .stats__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; padding-block: 3rem; }
 .stat { display: grid; gap: .25rem; border-left: 3px solid var(--maroon); padding-left: 1rem; }

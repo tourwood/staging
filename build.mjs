@@ -142,7 +142,14 @@ add('/', {
 </section>
 
 <section class="statement wrap" id="statement">
-  <p class="statement__text reveal">Your building has a lot of moving parts. We take responsibility for all of them: the hands-on technical work, the daily running of the site, the compliance side and the larger capital projects. One team answers for the lot, so nothing gets lost when a job passes between different trades.</p>
+  <p class="statement__text reveal">Your building has a lot of moving parts, and we take responsibility for all of them:</p>
+  <ul class="statement__list">
+    <li class="reveal">Daily running of the site</li>
+    <li class="reveal">Hands-on repairs and technical work</li>
+    <li class="reveal">Compliance</li>
+    <li class="reveal">Larger capital projects</li>
+  </ul>
+  <p class="statement__text reveal">One team answers for the lot, so nothing gets lost when a job passes between different trades.</p>
 </section>
 
 <section class="stats">
