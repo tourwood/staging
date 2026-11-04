@@ -40,7 +40,7 @@ export const services = [
   },
   {
     slug: 'high-rise-residential',
-    ctaLine: 'Discuss high rise residential cleaning / maintenance services for your property.',
+    ctaLine: 'Discuss cleaning / maintenance services for your high rise residential property.',
     title: 'High Rise Residential',
     short: 'Common-area cleaning and maintenance with a consistent point of contact.',
     img: 'highrise',
@@ -55,7 +55,7 @@ export const services = [
   },
   {
     slug: 'body-corporate',
-    ctaLine: 'Discuss body corporate cleaning / maintenance services for your property.',
+    ctaLine: 'Discuss cleaning / maintenance services for your body corporate.',
     title: 'Body Corporate',
     short: 'Foyers, corridors, stairwells, car parks and grounds, serviced on a routine.',
     img: 'highrise',
