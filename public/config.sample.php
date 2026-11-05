@@ -3,5 +3,7 @@
 return [
     'turnstile_secret' => 'PASTE_CLOUDFLARE_TURNSTILE_SECRET_KEY',
     'to'   => 'info@tourwood.com.au',
-    'from' => 'noreply@tourwood.com.au', // must be an address on the hosting domain so mail is not flagged as spoofed
+    // The sender address does NOT need to be a real mailbox (no licence needed), but the domain's SPF record must allow this
+    // hosting server to send for tourwood.com.au, otherwise Microsoft 365 may junk or reject the form emails.
+    'from' => 'noreply@tourwood.com.au',
 ];
