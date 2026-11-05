@@ -25,7 +25,15 @@ RewriteEngine On
 RewriteRule ^home/?$ / [R=301,L]
 RewriteRule ^services-client-sectors/?$ /services/ [R=301,L]
 RewriteRule ^contact-us/?$ /contact/ [R=301,L]
-# Add more here if Search Console / a crawl shows other old URLs (blog posts, ?p=ID links, etc.)
+# Old WordPress "project" stub pages (about 35 words each) -> closest new service page
+RewriteRule ^project/(general-office-cleaning|industrial-warehouse-cleaning)/?$ /services/commercial-industrial/ [R=301,L]
+RewriteRule ^project/(property-maintenance|electrical-maintenance-services|plumbing|glazing|garden-maintenance-services|chemical-acid-cleaning)/?$ /services/maintenance-specialist/ [R=301,L]
+RewriteRule ^project/?$ /services/ [R=301,L]
+# Old WordPress category archive pages
+RewriteRule ^project_category/ /services/ [R=301,L]
+# Old test pages (one contains unrelated German spam content): tell search engines they are gone (410)
+RewriteRule ^(testing-2|hover-images)/?$ - [G,L]
+# Anything else found later (e.g. ?p=ID links) can be added here.
 
 # --- Uncomment once SSL is active on the live site (force https) ---
 # RewriteCond %{HTTPS} off

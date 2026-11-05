@@ -38,6 +38,6 @@ Repo Settings → Pages → Source: **GitHub Actions**. Every push to `main` dep
 
 ## SEO / migration notes
 - Old WordPress URLs kept unchanged: `/why-tourwood/`, `/emergencies/`, `/covid-deep-cleaning/`, `/quality-assurance/`, `/environment/` (see `extras` in `src/data/site.mjs`). Linked from the footer only.
-- 301 redirects in `public/.htaccess`: `/home/` → `/`, `/services-client-sectors/` → `/services/`, `/contact-us/` → `/contact/`. Add more if Search Console shows other old URLs.
+- 301 redirects in `public/.htaccess` cover every URL in the old WordPress sitemap (checked 5 Nov 2026): `/home/`, `/services-client-sectors/`, `/contact-us/`, 8 `/project/*` stubs, `/project_category/*`. `/testing-2/` and `/hover-images/` return 410 Gone. After launch test with `curl -I https://www.tourwood.com.au/contact-us/`.
 - Canonical host is `https://www.tourwood.com.au` (override with `SITE_URL=`). Canonical, Open Graph and LocalBusiness JSON-LD are only emitted on the live build (not on staging, which is noindex).
 - Pending client confirmation: Emergencies and COVID wording (old content is partly dated), and any old URLs not yet seen.

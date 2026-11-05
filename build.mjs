@@ -10,6 +10,7 @@ const BASE = (process.env.BASE || '').replace(/\/$/, '');
 const DEMO = process.env.FORM_DEMO === '1';
 const SITEKEY = process.env.TURNSTILE_SITEKEY || '1x00000000000000000000AA'; // Cloudflare test key
 const OUT = 'dist';
+const LICENCE = { w: 193, h: 149 };
 // Canonical host: matches the existing indexed URLs on the old site (www).
 const SITE = (process.env.SITE_URL || 'https://www.tourwood.com.au').replace(/\/$/, '');
 
@@ -130,6 +131,7 @@ ${body}
     <div>
       <img class="ftr__logo" src="${u('/assets/img/logo-white.png')}" width="1191" height="369" alt="${esc(site.name)}" loading="lazy">
       <p class="ftr__tag">${esc(site.tagline)}</p>
+      <img class="ftr__licence" src="${u('/assets/img/labour-hire-licence.png')}" width="${LICENCE.w}" height="${LICENCE.h}" alt="Labour Hire Authority licence number VICLHL06212" loading="lazy">
     </div>
     <div>
       <h2>Contact</h2>
