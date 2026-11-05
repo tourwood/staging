@@ -16,7 +16,7 @@ function out(bool $ok, string $error = '', int $code = 200): void {
 if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') out(false, 'Method not allowed.', 405);
 
 $cfgFile = __DIR__ . '/config.php';
-if (!is_file($cfgFile)) out(false, 'The form is not configured yet. Please call us on 03 9853 6330.', 500);
+if (!is_file($cfgFile)) out(false, 'The form is not configured yet. Please use the phone number on our Contact page.', 500);
 $cfg = require $cfgFile;
 
 // Honeypot: real visitors never fill this in. Pretend success so bots learn nothing.
@@ -70,8 +70,15 @@ $headers = [
 $hdr = '';
 foreach ($headers as $k => $v) $hdr .= "$k: $v\r\n";
 
+// Safety net: keep a private copy of every valid submission (outside public_html) so no enquiry is lost if email delivery fails.
+$logFile = $cfg['log_file'] ?? (dirname(__DIR__) . '/tourwood-quote-log.txt');
+if ($logFile) {
+    $line = date('c') . " | $name | $email | " . ($phone ?: '-') . " | $prop | " . str_replace(["\r", "\n"], ' ', $msg ?: '-') . "\n";
+    if (@file_put_contents($logFile, $line, FILE_APPEND | LOCK_EX) !== false) @chmod($logFile, 0600);
+}
+
 $sent = mail($cfg['to'], '=?UTF-8?B?' . base64_encode($subject) . '?=', $body, $hdr, '-f' . $cfg['from']);
-if (!$sent) out(false, 'Sorry, that did not send. Please call us on 03 9853 6330.', 500);
+if (!$sent) out(false, 'Sorry, that did not send. Please use the phone number on our Contact page.', 500);
 
 @touch($rl);
 out(true);

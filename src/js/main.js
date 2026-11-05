@@ -26,6 +26,17 @@
     } catch (e) { /* leave link pointing at the contact page */ }
   });
 
+  // Phone and fax numbers: same approach, assembled in the browser only.
+  var phoneText = '';
+  document.querySelectorAll('.ph').forEach(function (el) {
+    try {
+      var n = atob(el.dataset.n);
+      el.textContent = n;
+      if (el.dataset.h) { el.href = 'te' + 'l:' + atob(el.dataset.h); if (!phoneText) phoneText = n; }
+    } catch (e) { /* leave placeholder */ }
+  });
+  var callUs = phoneText ? 'Please call us on ' + phoneText + '.' : 'Please use the phone number on our Contact page.';
+
   // Quote / contact forms
   document.querySelectorAll('form.qform').forEach(function (form) {
     var status = form.querySelector('.qform__status');
@@ -57,9 +68,9 @@
         .then(function (r) { return r.json().catch(function () { return { ok: false }; }); })
         .then(function (d) {
           if (d && d.ok) { form.reset(); if (t) t.value = String(Date.now()); if (window.turnstile) window.turnstile.reset(); say('Thanks. We have your request and will be in touch soon.', true); }
-          else { if (window.turnstile) window.turnstile.reset(); say((d && d.error) || 'Sorry, that did not send. Please call us on 03 9853 6330.', false); }
+          else { if (window.turnstile) window.turnstile.reset(); say((d && d.error) || 'Sorry, that did not send. ' + callUs, false); }
         })
-        .catch(function () { say('Sorry, that did not send. Please call us on 03 9853 6330.', false); })
+        .catch(function () { say('Sorry, that did not send. ' + callUs, false); })
         .then(function () { btn.disabled = false; });
     });
   });

@@ -32,6 +32,12 @@ function email(label = '') {
   return `<a class="em" href="${u('/contact/')}" data-u="${b64(site.emailUser)}" data-d="${b64(site.emailDomain)}" data-show="${label ? '0' : '1'}">${l}</a><noscript> (enable JavaScript to see our email address, or use the contact form)</noscript>`;
 }
 
+// Phone and fax numbers are only emitted as base64 fragments and assembled in the visitor's browser (same idea as email()).
+function phone(kind = 'tel') {
+  if (kind === 'fax') return `<span class="ph" data-n="${b64(site.fax)}">number shown with JavaScript</span>`;
+  return `<a class="ph" href="${u('/contact/')}" data-n="${b64(site.phone)}" data-h="${b64(site.phoneHref)}">Call us</a>`;
+}
+
 const cta = (text = 'Get a Quote', href = '/#quote', cls = '') =>
   `<a class="btn ${cls}" href="${u(href)}">${text}<svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>`;
 
@@ -105,8 +111,6 @@ ${!BASE && (path === '/' || path === '/contact/') ? `<script type="application/l
   logo: SITE + '/assets/img/logo.png',
   image: SITE + '/assets/img/og.jpg',
   description: 'Commercial cleaning and property maintenance for commercial, industrial, high rise residential and body corporate properties across Victoria.',
-  telephone: '+61 3 9853 6330',
-  faxNumber: '+61 3 9853 0915',
   address: { '@type': 'PostalAddress', streetAddress: 'Suite 213, 1 Princess Street', addressLocality: 'Kew', addressRegion: 'VIC', postalCode: '3101', addressCountry: 'AU' },
   areaServed: { '@type': 'State', name: 'Victoria' },
   foundingDate: undefined,
@@ -135,7 +139,7 @@ ${body}
     </div>
     <div>
       <h2>Contact</h2>
-      <p><a href="tel:${site.phoneHref}">${site.phone}</a><br>${email()}<br>${site.addressLines.join('<br>')}</p>
+      <p>${phone()}<br>${email()}<br>${site.addressLines.join('<br>')}</p>
     </div>
     <div>
       <h2>Services</h2>
@@ -227,7 +231,7 @@ add('/', {
     <div class="quote__intro">
       <h2 class="h2 h2--light reveal">Get a quote</h2>
       <p class="reveal">Tell us about your property and what you need. We'll come back to you to discuss the details.</p>
-      <p class="reveal quote__alt">Prefer to talk? <a href="tel:${site.phoneHref}">${site.phone}</a></p>
+      <p class="reveal quote__alt">Prefer to talk? ${phone()}</p>
     </div>
     <div class="quote__form reveal">${quoteForm('quote-form')}</div>
   </div>
@@ -314,7 +318,7 @@ add('/contact/', {
   <div class="contact__info reveal">
     <h2>Tourwood Property Services</h2>
     <p>${site.addressLines.join('<br>')}</p>
-    <p>Tel <a href="tel:${site.phoneHref}">${site.phone}</a><br>Fax ${site.fax}<br>${email()}</p>
+    <p>Tel ${phone()}<br>Fax ${phone('fax')}<br>${email()}</p>
     <p class="small">${esc(site.legal)}<br>ABN ${site.abn}<br>Licence ${site.licence}</p>
   </div>
   <div class="contact__form reveal"><h2>Send us a message</h2>${quoteForm('contact-form')}</div>
