@@ -111,6 +111,8 @@ ${!BASE && (path === '/' || path === '/contact/') ? `<script type="application/l
   logo: SITE + '/assets/img/logo.png',
   image: SITE + '/assets/img/og.jpg',
   description: 'Commercial cleaning and property maintenance for commercial, industrial, high rise residential and body corporate properties across Victoria.',
+  telephone: '+61 3 9853 6330',
+  faxNumber: '+61 3 9853 0915',
   address: { '@type': 'PostalAddress', streetAddress: 'Suite 213, 1 Princess Street', addressLocality: 'Kew', addressRegion: 'VIC', postalCode: '3101', addressCountry: 'AU' },
   areaServed: { '@type': 'State', name: 'Victoria' },
   foundingDate: undefined,
