@@ -77,7 +77,17 @@ if ($logFile) {
     if (@file_put_contents($logFile, $line, FILE_APPEND | LOCK_EX) !== false) @chmod($logFile, 0600);
 }
 
-$sent = mail($cfg['to'], '=?UTF-8?B?' . base64_encode($subject) . '?=', $body, $hdr, '-f' . $cfg['from']);
+define('TW_FORM', true);
+$smtpErr = null;
+if (!empty($cfg['smtp_host']) && !empty($cfg['smtp_pass'])) {
+    require __DIR__ . '/_smtp.php';
+    $sent = tw_smtp_send($cfg, $cfg['from'], $cfg['to'], $email, $subject, $body, $smtpErr);
+    if (!$sent) error_log('Tourwood form SMTP failure: ' . $smtpErr);
+} else {
+    $sent = mail($cfg['to'], '=?UTF-8?B?' . base64_encode($subject) . '?=', $body, $hdr, '-f' . $cfg['from']);
+}
+// Private record of the send result (never shown to visitors) to help troubleshooting.
+if ($logFile) @file_put_contents($logFile, '  -> ' . ($sent ? 'sent' : 'FAILED: ' . ($smtpErr ?? 'mail() returned false')) . "\n", FILE_APPEND | LOCK_EX);
 if (!$sent) out(false, 'Sorry, that did not send. Please use the phone number on our Contact page.', 500);
 
 @touch($rl);

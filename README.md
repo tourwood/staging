@@ -41,3 +41,8 @@ Repo Settings → Pages → Source: **GitHub Actions**. Every push to `main` dep
 - 301 redirects in `public/.htaccess` cover every URL in the old WordPress sitemap (checked 5 Nov 2026): `/home/`, `/services-client-sectors/`, `/contact-us/`, 8 `/project/*` stubs, `/project_category/*`. `/testing-2/` and `/hover-images/` return 410 Gone. After launch test with `curl -I https://www.tourwood.com.au/contact-us/`.
 - Canonical host is `https://www.tourwood.com.au` (override with `SITE_URL=`). Canonical, Open Graph and LocalBusiness JSON-LD are only emitted on the live build (not on staging, which is noindex).
 - Pending client confirmation: Emergencies and COVID wording (old content is partly dated), and any old URLs not yet seen.
+
+## Form email: authenticated SMTP
+`public/quote.php` sends via `public/_smtp.php` (implicit TLS, port 465, AUTH LOGIN) when `smtp_host` and `smtp_pass` are set in the server-only `config.php`
+(see `config.sample.php`). The sender mailbox `noreply@tourwood.com.au` must exist in cPanel > Email Accounts (not Microsoft 365).
+If SMTP is not configured it falls back to PHP `mail()`. Each submission's send result ("sent" / "FAILED: reason") is appended to the private log file.
