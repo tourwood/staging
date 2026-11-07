@@ -3,12 +3,24 @@
 // Protections: POST only, honeypot field, minimum fill time, Cloudflare Turnstile verification,
 // header-injection checks, simple per-IP rate limit. Secrets live in config.php (not in git).
 declare(strict_types=1);
+ob_start(); // swallow any stray output so the JSON reply stays valid
 
-header('Content-Type: application/json; charset=utf-8');
-header('X-Content-Type-Options: nosniff');
+// Attempt trace (no personal data): records the stage where each submission ended, for troubleshooting.
+// Written to the folder ABOVE the website folder so it is never downloadable. Disable with 'diag_log' => false in config.php.
+function tw_diag(string $msg): void {
+    global $cfg;
+    if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') return; // ignore bots probing with GET
+    $f = (is_array($cfg ?? null) && array_key_exists('diag_log', $cfg)) ? $cfg['diag_log'] : (dirname(__DIR__) . '/tourwood-form-attempts.txt');
+    if (!$f) return;
+    if (@file_put_contents($f, date('c') . ' | ' . $msg . "\n", FILE_APPEND | LOCK_EX) === false) error_log('Tourwood form: cannot write ' . $f);
+}
 
 function out(bool $ok, string $error = '', int $code = 200): void {
+    tw_diag(($ok ? 'ok' : 'stopped') . " | HTTP $code" . ($error !== '' ? " | $error" : ''));
+    while (ob_get_level() > 0) ob_end_clean(); // discard stray output
     http_response_code($code);
+    header('Content-Type: application/json; charset=utf-8');
+    header('X-Content-Type-Options: nosniff');
     echo json_encode($ok ? ['ok' => true] : ['ok' => false, 'error' => $error]);
     exit;
 }
@@ -17,10 +29,14 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') out(false, 'Method not allowe
 
 $cfgFile = __DIR__ . '/config.php';
 if (!is_file($cfgFile)) out(false, 'The form is not configured yet. Please use the phone number on our Contact page.', 500);
+ob_start();
 $cfg = require $cfgFile;
+$stray = ob_get_clean();
+if ($stray !== '' && $stray !== false) error_log('Tourwood form: config.php prints text before <?php or after ?> (' . strlen($stray) . ' bytes). Remove it (check for a BOM or stray character on line 1).');
+if (!is_array($cfg)) out(false, 'The form is not configured correctly. Please use the phone number on our Contact page.', 500);
 
 // Honeypot: real visitors never fill this in. Pretend success so bots learn nothing.
-if (trim((string)($_POST['company_website'] ?? '')) !== '') out(true);
+if (trim((string)($_POST['company_website'] ?? '')) !== '') { tw_diag('honeypot filled (silent success, nothing sent)'); out(true); }
 
 // Too fast to be human (form value is a JS timestamp in ms).
 $t = (int)($_POST['t'] ?? 0);
@@ -72,9 +88,13 @@ foreach ($headers as $k => $v) $hdr .= "$k: $v\r\n";
 
 // Safety net: keep a private copy of every valid submission (outside public_html) so no enquiry is lost if email delivery fails.
 $logFile = $cfg['log_file'] ?? (dirname(__DIR__) . '/tourwood-quote-log.txt');
+if ($logFile && $logFile[0] !== '/') $logFile = dirname(__DIR__) . '/' . ltrim($logFile, './');
+// Never keep personal details inside the public website folder.
+if ($logFile && strpos(str_replace('\\', '/', (string)$logFile), str_replace('\\', '/', __DIR__) . '/') === 0) $logFile = dirname(__DIR__) . '/tourwood-quote-log.txt';
 if ($logFile) {
     $line = date('c') . " | $name | $email | " . ($phone ?: '-') . " | $prop | " . str_replace(["\r", "\n"], ' ', $msg ?: '-') . "\n";
     if (@file_put_contents($logFile, $line, FILE_APPEND | LOCK_EX) !== false) @chmod($logFile, 0600);
+    else error_log('Tourwood form: cannot write ' . $logFile);
 }
 
 define('TW_FORM', true);
@@ -88,6 +108,7 @@ if (!empty($cfg['smtp_host']) && !empty($cfg['smtp_pass'])) {
 }
 // Private record of the send result (never shown to visitors) to help troubleshooting.
 if ($logFile) @file_put_contents($logFile, '  -> ' . ($sent ? 'sent' : 'FAILED: ' . ($smtpErr ?? 'mail() returned false')) . "\n", FILE_APPEND | LOCK_EX);
+if (!$sent) tw_diag('send failed: ' . ($smtpErr ?? 'mail() returned false'));
 if (!$sent) out(false, 'Sorry, that did not send. Please use the phone number on our Contact page.', 500);
 
 @touch($rl);

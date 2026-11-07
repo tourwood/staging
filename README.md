@@ -46,3 +46,9 @@ Repo Settings → Pages → Source: **GitHub Actions**. Every push to `main` dep
 `public/quote.php` sends via `public/_smtp.php` (implicit TLS, port 465, AUTH LOGIN) when `smtp_host` and `smtp_pass` are set in the server-only `config.php`
 (see `config.sample.php`). The sender mailbox `noreply@tourwood.com.au` must exist in cPanel > Email Accounts (not Microsoft 365).
 If SMTP is not configured it falls back to PHP `mail()`. Each submission's send result ("sent" / "FAILED: reason") is appended to the private log file.
+
+## Troubleshooting the form (v5)
+`quote.php` buffers output, so stray characters (BOM, text before `<?php`) in `config.php` cannot corrupt the JSON reply; they are reported in the PHP `error_log`.
+Every POST also appends one line (no personal data) to `tourwood-form-attempts.txt` in the folder above the site, showing where it stopped
+(honeypot / timer / rate limit / Turnstile / validation / send failed + reason / ok). A relative `log_file` is resolved against that same folder, and a log path
+inside the website folder is ignored. `.htaccess` also blocks downloads of `*quote-log*.txt` / `*form-attempts*.txt`.

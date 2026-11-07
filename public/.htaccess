@@ -6,6 +6,10 @@
   Require all denied
 </Files>
 
+<FilesMatch "(?i)(quote-log|form-attempts).*\.txt$">
+  Require all denied
+</FilesMatch>
+
 Options -Indexes
 ErrorDocument 404 /404.html
 
