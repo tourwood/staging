@@ -36,7 +36,8 @@ if ($stray !== '' && $stray !== false) error_log('Tourwood form: config.php prin
 if (!is_array($cfg)) out(false, 'The form is not configured correctly. Please use the phone number on our Contact page.', 500);
 
 // Honeypot: real visitors never fill this in. Pretend success so bots learn nothing.
-if (trim((string)($_POST['company_website'] ?? '')) !== '') { tw_diag('honeypot filled (silent success, nothing sent)'); out(true); }
+$hp = trim((string)($_POST['tw_extra_q7x'] ?? ''));
+if ($hp !== '') { tw_diag('honeypot filled, ' . strlen($hp) . ' chars (silent success, nothing sent)'); out(true); }
 
 // Too fast to be human (form value is a JS timestamp in ms).
 $t = (int)($_POST['t'] ?? 0);
